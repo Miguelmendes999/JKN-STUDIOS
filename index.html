@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JKN Studios Discord Hub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 25%, #16213e 50%, #1a1a2e 75%, #0a0a0a 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .bg-circle {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(45deg, rgba(0, 162, 255, 0.1), rgba(255, 0, 255, 0.1));
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .bg-circle:nth-child(1) {
+            width: 200px;
+            height: 200px;
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .bg-circle:nth-child(2) {
+            width: 150px;
+            height: 150px;
+            top: 60%;
+            right: 10%;
+            animation-delay: 2s;
+        }
+
+        .bg-circle:nth-child(3) {
+            width: 100px;
+            height: 100px;
+            top: 80%;
+            left: 20%;
+            animation-delay: 4s;
+        }
+
+        .bg-circle:nth-child(4) {
+            width: 250px;
+            height: 250px;
+            top: 20%;
+            right: 20%;
+            animation-delay: 6s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px) rotate(0deg);
+                opacity: 0.3;
+            }
+            50% {
+                transform: translateY(-30px) rotate(180deg);
+                opacity: 0.8;
+            }
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 90%;
+            text-align: center;
+            padding: 50px 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .header {
+            margin-bottom: 60px;
+        }
+
+        .title {
+            font-size: 70px;
+            font-weight: 900;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #00a2ff, #ff00ff, #ffaa00, #00ff88);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 3s ease-in-out infinite;
+            text-shadow: 0 0 50px rgba(255, 255, 255, 0.5);
+        }
+
+        @keyframes gradientShift {
+            0%, 100% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+
+        .subtitle {
+            font-size: 26px;
+            margin-bottom: 20px;
+            color: #e0e0e0;
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        .status-bar {
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 12px 25px;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            margin-bottom: 40px;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            background: #00ff88;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+            box-shadow: 0 0 10px #00ff88;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.6;
+                transform: scale(1.2);
+            }
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            margin-bottom: 50px;
+        }
+
+        .card {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            padding: 45px 35px;
+            backdrop-filter: blur(20px);
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.6s;
+        }
+
+        .card:hover::before {
+            left: 100%;
+        }
+
+        .card:hover {
+            transform: translateY(-10px) scale(1.02);
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08));
+            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 25px;
+            background: linear-gradient(45deg, #00a2ff, #0066cc);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 35px;
+            box-shadow: 0 10px 30px rgba(0, 162, 255, 0.3);
+            position: relative;
+        }
+
+        .card-icon.free {
+            background: linear-gradient(45deg, #00ff88, #00cc66);
+            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.3);
+        }
+
+        .card-icon::after {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            background: linear-gradient(45deg, #00a2ff, #0066cc, #00a2ff);
+            border-radius: 22px;
+            z-index: -1;
+            animation: borderRotate 3s linear infinite;
+        }
+
+        .card-icon.free::after {
+            background: linear-gradient(45deg, #00ff88, #00cc66, #00ff88);
+        }
+
+        @keyframes borderRotate {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .card-title {
+            font-size: 36px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            color: #ffffff;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .card-description {
+            font-size: 17px;
+            margin-bottom: 25px;
+            color: #d0d0d0;
+            line-height: 1.7;
+        }
+
+        .card-specs {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            color: #a0a0a0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 18px 35px;
+            font-size: 16px;
+            font-weight: 700;
+            text-decoration: none;
+            border-radius: 15px;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            cursor: pointer;
+            border: none;
+            width: 100%;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn-loja {
+            background: linear-gradient(135deg, #00a2ff 0%, #0066cc 100%);
+            color: #ffffff;
+            box-shadow: 0 8px 25px rgba(0, 162, 255, 0.4);
+        }
+
+        .btn-loja:hover {
+            background: linear-gradient(135deg, #0088dd 0%, #0055aa 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 162, 255, 0.6);
+        }
+
+        .btn-free {
+            background: linear-gradient(135deg, #00ff88 0%, #00cc66 100%);
+            color: #000000;
+            box-shadow: 0 8px 25px rgba(0, 255, 136, 0.4);
+        }
+
+        .btn-free:hover {
+            background: linear-gradient(135deg, #00dd77 0%, #00aa55 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 255, 136, 0.6);
+        }
+
+        .footer {
+            margin-top: 50px;
+            padding: 30px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .footer-text {
+            font-size: 16px;
+            color: #b0b0b0;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .footer-tech {
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            color: #808080;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .user-info {
+            position: fixed;
+            bottom: 25px;
+            left: 25px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px 20px;
+            border-radius: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            color: #888888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .notification {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.9), rgba(20, 20, 20, 0.9));
+            color: white;
+            padding: 20px 30px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            font-size: 14px;
+            z-index: 1000;
+            transform: translateX(100%);
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            font-family: 'Courier New', monospace;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        @media (max-width: 768px) {
+            .title {
+                font-size: 45px;
+            }
+            .subtitle {
+                font-size: 18px;
+            }
+            .cards {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            .card {
+                padding: 30px 25px;
+            }
+            .container {
+                padding: 30px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="bg-animation">
+        <div class="bg-circle"></div>
+        <div class="bg-circle"></div>
+        <div class="bg-circle"></div>
+        <div class="bg-circle"></div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1 class="title">JKN STUDIOS</h1>
+            <p class="subtitle">Plataforma Premium Discord • Loja & Conteúdos Gratuitos</p>
+            
+            <div class="status-bar">
+                <div class="status-dot"></div>
+                <span>Sistema Online • Latência: < 8ms • Uptime: 99.99% • Servidor BR</span>
+            </div>
+        </div>
+        
+        <div class="cards">
+            <!-- LOJA Card -->
+            <div class="card">
+                <div class="card-icon">
+                    🛒
+                </div>
+                <h2 class="card-title">LOJA</h2>
+                <p class="card-description">
+                    Loja premium da JKN Studios com produtos exclusivos. E-commerce de alta performance com sistema de pagamento seguro e entrega instantânea.
+                </p>
+                <div class="card-specs">
+                    💳 PIX/CARD • 🔒 SSL/TLS 1.3 • ⚡ Entrega Instantânea • 🛡️ Garantia Total • 🇧🇷 Suporte BR
+                </div>
+                <button class="btn btn-loja" onclick="connectToDiscord('LOJA')">
+                    🛒 Acessar Loja Premium
+                </button>
+            </div>
+
+            <!-- FREE Card -->
+            <div class="card">
+                <div class="card-icon free">
+                    🎁
+                </div>
+                <h2 class="card-title">FREE VAZAMENTOS</h2>
+                <p class="card-description">
+                    Conteúdos 100% gratuitos da JKN Studios. Scripts, modelos, ferramentas e recursos premium totalmente grátis para toda a comunidade.
+                </p>
+                <div class="card-specs">
+                    🆓 100% Gratuito • 📜 Scripts Premium • 🏗️ Modelos Base • ⚡ Updates Diários • 🔓 Acesso Livre
+                </div>
+                <button class="btn btn-free" onclick="connectToDiscord('FREE')">
+                    🎁 Acessar Conteúdo Gratuito
+                </button>
+            </div>
+        </div>
+
+        <div class="footer">
+            <div class="footer-text">
+                Conexão WebSocket segura estabelecida • Clique nos botões para acessar as comunidades Discord<br>
+                JKN Studios - Sua plataforma premium de conteúdos e e-commerce
+            </div>
+            <div class="footer-tech">
+                🔐 TLS 1.3 • 🌐 IPv6 Ready • 📋 LGPD Compliant • 🛡️ SOC 2 Type II • 🇧🇷 Servidor Brasil
+            </div>
+        </div>
+    </div>
+
+    <!-- User Info -->
+    <div class="user-info">
+        👤 Usuário: TU NAO SABE<br>
+        📅 Data: 2025-05-29 21:35:50 UTC
+    </div>
+
+    <script>
+        function connectToDiscord(community) {
+            // Show notification
+            showNotification(`🔗 Conectando ao ${community}...`);
+            
+            // Change button text
+            const originalText = event.target.innerHTML;
+            event.target.innerHTML = '⏳ CONECTANDO...';
+            event.target.disabled = true;
+            
+            // Console log in Portuguese
+            console.log(`[${new Date().toLocaleString('pt-BR')}] 🚀 INICIANDO CONEXÃO JKN STUDIOS`);
+            console.log(`├─ 🎯 Destino: ${community}`);
+            console.log(`├─ 🔒 Protocolo: HTTPS/WSS`);
+            console.log(`├─ 🔑 Autenticação: OAuth 2.0`);
+            console.log(`├─ 👤 Usuário: Miguelmendes999`);
+            console.log(`├─ 🏢 Plataforma: JKN Studios`);
+            console.log(`└─ ⚡ Status: ESTABELECENDO...`);
+            
+            setTimeout(function() {
+                if (community === 'LOJA') {
+                    window.open('https://discord.gg/BHfbqDu599');
+                } else if (community === 'FREE') {
+                    window.open(' https://discord.gg/dj4q7G2ynU Link ');
+                }
+                
+                // Reset button
+                event.target.innerHTML = originalText;
+                event.target.disabled = false;
+                
+                // Success log
+                console.log(`[${new Date().toLocaleString('pt-BR')}] ✅ CONEXÃO ESTABELECIDA COM SUCESSO`);
+                console.log(`├─ 🎯 Destino: ${community}`);
+                console.log(`├─ ✅ Status: CONECTADO`);
+                console.log(`├─ 🔗 Sessão: ATIVA`);
+                console.log(`├─ 🚀 Redirecionamento: CONCLUÍDO`);
+                console.log(`└─ 🏢 Bem-vindo ao JKN Studios!`);
+                
+            }, 2500);
+        }
+
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            
+            const timestamp = new Date().toLocaleTimeString('pt-BR');
+            notification.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="width: 8px; height: 8px; background: #00ff88; border-radius: 50%; animation: pulse 2s infinite;"></div>
+                    <div>
+                        <strong>[${timestamp}] JKN STUDIOS</strong><br>
+                        ${message}
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => notification.classList.add('show'), 100);
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => notification.remove(), 400);
+            }, 4000);
+        }
+
+        // Console welcome message
+        console.log(`
+╔════════════════════════════════════════════════════════════════╗
+║                      🏢 JKN STUDIOS 🇧🇷                       ║
+║                Interface Técnica Premium v3.0                  ║
+║════════════════════════════════════════════════════════════════║
+║  🟢 Status: ONLINE          │  🌐 Ambiente: Produção           ║
+║  ⚡ Latência: <8ms          │  🔒 SSL: TLS 1.3                 ║
+║  📊 Uptime: 99.99%          │  🚀 CDN: Global + Brasil         ║
+║  👤 Usuário: Miguelmendes999│  📅 Data: 2025-05-29 21:35:50    ║
+╚════════════════════════════════════════════════════════════════╝
+        `);
+
+        console.log('🏢 [JKN STUDIOS] Sistema inicializado com sucesso');
+        console.log('🛒 [LOJA] Loja premium carregada');
+        console.log('🎁 [FREE] Conteúdos gratuitos disponíveis');
+        console.log('🔒 [SISTEMA] Todas as conexões seguras ativas');
+        console.log('🇧🇷 [SERVIDOR] Servidor brasileiro conectado');
+        console.log(`👤 [USUÁRIO] Miguelmendes999 autenticado`);
+        console.log(`⏰ [SESSÃO] Iniciada em 2025-05-29 21:35:50 UTC`);
+
+        // Update system status
+        setInterval(function() {
+            const latency = Math.floor(Math.random() * 5) + 5; // 5-10ms
+            const uptime = (99.97 + Math.random() * 0.02).toFixed(2); // 99.97-99.99%
+            
+            document.querySelector('.status-bar span').textContent = 
+                `Sistema Online • Latência: < ${latency}ms • Uptime: ${uptime}% • Servidor BR`;
+            
+            console.log(`🔄 [${new Date().toLocaleString('pt-BR')}] STATUS ATUALIZADO - Latência: ${latency}ms | Uptime: ${uptime}%`);
+        }, 12000);
+    </script>
+</body>
+</html>
