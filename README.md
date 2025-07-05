@@ -1,7 +1,3 @@
-# 🔧 Discord Communities - Technical Hub
-
-Um site **TÉCNICO** e **FUNCIONAL** para acessar comunidades Discord com design GitHub-style.
-
 ## ⚡ Características Técnicas
 
 ### 🖥️ **Interface Terminal-Style**
